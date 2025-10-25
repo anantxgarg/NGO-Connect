@@ -1,168 +1,239 @@
-# NGO Connect - Bridge Between NGOs and Volunteers
+# NGO Connect
 
-A full-stack web platform connecting verified NGOs with volunteers and donors in Pune, Maharashtra.
+A modern web platform connecting verified NGOs with volunteers and donors to create meaningful social impact.
+Built with Next.js 13.5, TypeScript, and Supabase.
 
-## Features
+## 🌍 Overview
 
-### For Users (Volunteers/Donors)
-- Browse verified NGOs and their active drives
-- Apply for volunteer opportunities
-- Contact NGOs for donations
-- Track application status
-- Save posts for later
-- Real-time notifications
+NGO Connect bridges the gap between non-governmental organizations and people who want to make a difference.
+The platform enables verified NGOs to post volunteer opportunities and donation needs while giving volunteers and donors a trusted space to discover and engage with causes they care about.
 
-### For NGOs
-- Create organization profile
-- Post volunteer drives and donation needs
-- Manage applications from volunteers
-- Track engagement and views
-- Get verified by admins
+## ✨ Key Features
+### 🔹 NGO Verification System
+Admin-reviewed process ensuring legitimacy and trust.
+### 🔹 Dual Post Types
+Support for both volunteer drives and donation needs.
+### 🔹 Role-Based Access Control
+Separate interfaces for Users, NGOs, and Administrators.
+### 🔹 Application Management
+End-to-end workflow for volunteer applications.
+### 🔹 Real-Time Notifications
+Instant updates on application status and new opportunities.
+### 🔹 Smart Search & Filtering
+Find opportunities by category, location, and type.
+### 🔹 Saved Posts
+Bookmark interesting opportunities for later.
+### 🔹 Contact System
+Direct communication between users and NGOs.
 
-### For Admins
-- Verify NGO registrations
-- Moderate content
-- View platform statistics
-- Audit user activities
+## 🧩 Tech Stack
+- Layer	Technology
+- Framework	Next.js 13.5 (App Router)
+- Language	TypeScript
+- Styling	Tailwind CSS, shadcn/ui
+- Database	PostgreSQL (via Supabase)
+- Authentication	Supabase Auth
+- Icons	Lucide React
+- Date Handling	date-fns
 
-## Tech Stack
+## 🧠 Architecture Overview
+The project follows a modular and type-safe structure using Server Actions for all database communication.
+- Server Components → used by default for performance
+- Client Components → explicitly marked with "use client" when needed
+- Server Actions → located in /actions, safely execute database operations
+- Supabase Integration → split between supabase.ts (server) and supabase-client.ts (client)
 
-- **Frontend**: Next.js 13+ (App Router), React 18, TypeScript
-- **Styling**: Tailwind CSS, shadcn/ui components
-- **Backend**: Next.js Server Actions
-- **Database**: Supabase (PostgreSQL)
-- **Authentication**: Supabase Auth
-- **Icons**: Lucide React
+## ⚙️ Prerequisites
+Ensure you have the following installed:
+- Node.js v18.0+
+- npm or yarn
+- Git
+- A Supabase account (free tier works perfectly)
 
-## Database
+## 🚀 Getting Started
+1. Clone the Repository
+```bash
+git clone <your-repository-url>
+cd ngo-connect\
+```
 
-The platform includes 8 real NGOs from Pune:
-
-1. **The Akanksha Foundation** - Education for underprivileged children
-2. **Swades Foundation** - Rural empowerment and education
-3. **Pune City Connect Foundation** - Community development
-4. **Sahyadri Nisarga Mitra** - Environmental conservation
-5. **Dilasa Charitable Trust** - Healthcare for rural communities
-6. **Snehalaya** - Child welfare and women empowerment
-7. **Vishwasrao Naik Charitable Trust** - Blood donation drives
-8. **Maharashtra Andhashraddha Nirmulan Samiti** - Social awareness
-
-Sample data includes 12 posts across categories like Education, Medical, Environment, Books, Clothes, and Technology.
-
-## Getting Started
-
-### Prerequisites
-- Node.js 18+ installed
-- Supabase account (already configured)
-
-### Installation
-
-1. Install dependencies:
+2. Install Dependencies
 ```bash
 npm install
 ```
 
-2. The environment variables are already configured in `.env`
+3. Set Up Supabase
 
-3. Run the development server:
+- Create a new project in your Supabase Dashboard.
+- Navigate to Project Settings → API to find your credentials.
+
+4. Configure Environment Variables
+
+- Create a .env.local file in the project root:
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+5. Run Database Migrations
+
+- Execute the following in your Supabase SQL Editor (in this order):
+```bash
+supabase/migrations/20251011051837_create_initial_schema.sql
+– Creates all core tables and RLS policies
+
+supabase/migrations/20251013040639_fix_auth_and_add_trigger.sql
+– Syncs authentication between Supabase Auth and the users table
+
+supabase/migrations/20251013040903_seed_pune_ngos_data.sql
+– Adds sample NGO data
+
+supabase/migrations/20251013040948_seed_posts_for_ngos.sql
+– Adds sample posts
+```
+
+6. Start Development Server
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000)
+Visit: http://localhost:3000
 
-### Building for Production
+## 🧱 Project Structure
+```
+ngo-connect/
+├── app/
+│   ├── auth/                 # Authentication (sign-in / sign-up)
+│   ├── dashboard/            # User dashboard
+│   ├── ngo/                  # NGO pages and dashboards
+│   ├── admin/                # Admin dashboard
+│   ├── explore/              # Browse opportunities
+│   ├── ngos/                 # NGO directory
+│   ├── post/[id]/            # Post details
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── ui/                   # shadcn/ui components
+│   ├── shared/               # Reusable UI (navbar, cards, etc.)
+│   └── post/                 # Post-specific buttons
+├── actions/                  # Server actions (database ops)
+├── contexts/                 # Context providers (e.g., Auth)
+├── lib/                      # Supabase clients, types, utilities
+└── supabase/
+    └── migrations/           # SQL migrations
+```
 
+## 👥 User Roles
+Role	Capabilities
+- USER (Volunteer/Donor)	Browse NGOs, apply to drives, contact NGOs, save posts, manage applications
+- NGO (Organization)	Create/manage NGO profile, post drives & donations, handle applications
+- ADMIN	Verify NGOs, moderate posts, view audit logs & platform metrics
+## 🔒 Security & Access Control
+- Row Level Security (RLS) enabled for all tables.
+- Users only see data they’re authorized for.
+- Supabase Auth manages secure authentication and role assignment.
+- Role-based route protection ensures isolated dashboards for each user type.
+- Audit Logs track platform activity.
+- RLS Policies prevent unauthorized access even from the client side.
+
+## 🧾 Database Schema
+- Table	Description
+- users	Stores user accounts with roles (USER, NGO, ADMIN)
+- ngos	Organization profiles, contact info, verification - - status
+- posts	Volunteer drives & donation needs
+- applications	Volunteer applications
+- ngo_verifications	Admin-handled NGO verification
+- contact_inquiries	Direct messages to NGOs
+- notifications	Real-time user notifications
+- saved_posts	User bookmarks
+- audit_logs	Platform activity log
+## 🧪 Data
+
+Includes 8 verified NGOs from Pune, Maharashtra:
+
+- Akanksha Foundation – Education
+
+- Swades Foundation – Rural Empowerment
+
+- Pune City Connect – Community Development
+
+- Sahyadri Nisarga Mitra – Environment
+
+- Dilasa Charitable Trust – Rural Healthcare
+
+- Snehalaya – Child Welfare & Women Empowerment
+
+- VNCT – Blood Donation Drives
+
+- MANS – Scientific Awareness & Reform
+
+Also includes 12 sample posts covering drives and donations (Education, Medical, Environment, Books, Clothes, Technology).
+
+## 🛠️ Available Scripts
+### Start development server
+```bash
+npm run dev
+```
+### Production build
 ```bash
 npm run build
+```
+### Start production server
+```bash
 npm run start
 ```
-
-## Authentication
-
-The platform uses Supabase Auth with email/password authentication.
-
-### To Sign Up:
-1. Go to `/auth/sign-up`
-2. Enter your details
-3. Choose role: User or NGO
-4. Submit to create account
-
-### To Sign In:
-1. Go to `/auth/sign-in`
-2. Enter email and password
-3. You'll be redirected to the appropriate dashboard based on your role
-
-## Project Structure
-
+### Run ESLint checks
+```bash
+npm run lint
 ```
-├── app/                    # Next.js app directory
-│   ├── auth/              # Authentication pages
-│   ├── dashboard/         # User dashboard
-│   ├── ngo/              # NGO dashboard
-│   ├── admin/            # Admin dashboard
-│   ├── explore/          # Browse opportunities
-│   └── ngos/             # NGO directory
-├── components/
-│   ├── shared/           # Shared components
-│   └── ui/               # UI components (shadcn)
-├── lib/                  # Utilities and configs
-│   ├── auth.ts          # Auth helpers
-│   ├── database.types.ts # TypeScript types
-│   ├── supabase.ts      # Supabase client (server)
-│   └── supabase-client.ts # Supabase client (client)
-├── actions/             # Server actions
-│   ├── ngos.ts         # NGO-related actions
-│   └── posts.ts        # Post-related actions
-└── contexts/           # React contexts
-    └── auth-context.tsx # Auth state management
+### Type-check the codebase
+```bash
+npm run typecheck
 ```
+## 💡 Development Guidelines
 
-## Database Schema
+- Use server components by default. Add "use client" only when necessary.
+- Place client-only logic (with useState/useEffect) in /components.
+- Write all DB operations inside /actions with "use server".
+- Maintain type safety using lib/database.types.ts.
+- Follow Tailwind’s utility-first styling approach.
+- Keep .env.local secure (never commit it).
 
-- **users** - User accounts with roles (USER, NGO, ADMIN)
-- **ngos** - Organization profiles
-- **posts** - Volunteer drives and donation needs
-- **applications** - User applications to posts
-- **ngo_verifications** - NGO verification records
-- **contact_inquiries** - Messages to NGOs
-- **notifications** - User notifications
-- **saved_posts** - Bookmarked posts
-- **audit_logs** - Activity audit trail
+## ☁️ Deployment
 
-## Security
+- Recommended: Deploy on Vercel (Next.js-native support).
+- Push your code to GitHub/GitLab/Bitbucket
+- Import the repo into Vercel
+- Add environment variables in Project Settings
+- Deploy
 
-- Row Level Security (RLS) enabled on all tables
-- Role-based access control
-- Authenticated sessions via Supabase
-- Secure password hashing
-- CSRF protection
+Vercel auto-detects build settings for Next.js.
+- Database Migrations in Production
+- Apply migrations first to a staging Supabase project.
+- Test thoroughly, then apply to production.
 
-## Key Features Implemented
+## 🧰 Troubleshooting
+- Issue	Possible Fix
+- Auth not working	Run 20251013040639_fix_auth_and_add_trigger.sql
+- RLS errors	Check Supabase Auth session and user roles
+- Missing NGO data	Re-run seed migrations
+- Build errors	Run npm run typecheck and npm run lint
+## 🧑‍🤝‍🧑 Contributing
 
-✅ Complete database schema with RLS policies
-✅ Proper Supabase Auth integration with triggers
-✅ Role-based authentication (USER, NGO, ADMIN)
-✅ Beautiful, responsive UI with Tailwind CSS
-✅ 8 verified NGOs from Pune with real information
-✅ 12 sample posts (drives and donations)
-✅ Server-side data fetching with Server Actions
-✅ Type-safe database queries
-✅ Mobile-responsive design
+- Contributions are welcome!
+- Before submitting a PR:
+- Follow code style and directory conventions
+- Include TypeScript types for new entities
+- Test locally before committing
+- Update docs for new features
 
-## What's Next
+## 📜 License
 
-Future enhancements could include:
-- Post detail pages with apply functionality
-- NGO profile pages
-- Post creation and management forms
-- Application management (accept/reject)
-- Search and advanced filtering
-- File uploads for images and documents
-- Email notifications
-- Payment integration for donations
-- Maps integration for locations
+Licensed under the MIT License — see LICENSE file for details.
 
-## License
+## ❤️ Acknowledgments
 
-This project is for educational purposes.
+Built with the help of open-source tools:
+Next.js, Supabase, shadcn/ui, and Tailwind CSS.
+Special thanks to all contributors and NGOs inspiring real social change.
+
+Built with ❤️ to empower NGOs and volunteers to create meaningful social impact.
