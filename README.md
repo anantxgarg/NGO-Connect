@@ -79,16 +79,16 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 - Execute the following in your Supabase SQL Editor (in this order):
 ```bash
 supabase/migrations/20251011051837_create_initial_schema.sql
-– Creates all core tables and RLS policies
+#Creates all core tables and RLS policies
 
 supabase/migrations/20251013040639_fix_auth_and_add_trigger.sql
-– Syncs authentication between Supabase Auth and the users table
+#Syncs authentication between Supabase Auth and the users table
 
 supabase/migrations/20251013040903_seed_pune_ngos_data.sql
-– Adds sample NGO data
+#Adds sample NGO data
 
 supabase/migrations/20251013040948_seed_posts_for_ngos.sql
-– Adds sample posts
+#Adds sample posts
 ```
 
 6. Start Development Server
